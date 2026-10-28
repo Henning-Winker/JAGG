@@ -1,0 +1,43 @@
+Package: JAGG
+Type: Package
+Title: 'ggplot2' Graphics and Diagnostics for 'JABBA' and 'JARA'
+Version: 0.1.0
+Authors@R: c(
+    person("Henning", "Winker", email = "henning.winker@gmail.com",
+           role = c("aut", "cre")))
+Description: Provides 'ggplot2' versions of the plots and model diagnostics
+    for the Bayesian state-space surplus production model 'JABBA' (Just
+    Another Bayesian Biomass Assessment) and the Bayesian state-space trend
+    model 'JARA' (Just Another Red-List Assessment). Converts fitted 'JABBA'
+    and 'JARA' objects, hindcasts and lists of scenario runs into standard
+    tidy data frames, and plots stock status trajectories with nested
+    credible intervals and colour-coded reference points, index fits,
+    residual diagnostics, runs tests, retrospective analysis, hindcast
+    cross-validation with the mean absolute scaled error (MASE), posterior
+    predictive checks and ensembles. 'JABBA' and 'JARA' themselves are not
+    required to draw plots from their saved output, and their base-graphics
+    plots are left unchanged.
+License: EUPL (>= 1.2)
+URL: https://github.com/henning-winker/JAGG
+BugReports: https://github.com/henning-winker/JAGG/issues
+Depends:
+    R (>= 3.5)
+Imports:
+    ggplot2 (>= 3.4.0),
+    grDevices,
+    stats
+Suggests:
+    JABBA,
+    JARA,
+    patchwork,
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+Remotes:
+    jabbamodel/JABBA,
+    henning-winker/JARA
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Config/testthat/edition: 3
