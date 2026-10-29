@@ -48,3 +48,32 @@ jagg_runstest(jr)
 jagg_retro(jrhc, ref = jr)      # jara_hindcast() has no reference run: pass it
 jagg_hcxval(jrhc, ref = jr)
 jagg_mase(jrhc, ref = jr)
+
+#-----------------------------------------------------------
+# JARA mixed trends: ICES Greater North Sea stocks
+# Data: ices.ts.cat1.csv from github.com/Henning-Winker/ICES-Bmsy-FaF
+# (Winker et al. 2026, Fish and Fisheries, doi:10.1111/faf.70066)
+#-----------------------------------------------------------
+dat <- read.csv("ices.ts.cat1.csv")
+dat <- dat[dat$Year >= 1980 & dat$ecoregion == "Greater North Sea", ]
+wide <- function(v) {
+  w <- reshape(dat[, c("Year", "stock", v)], idvar = "Year", timevar = "stock", direction = "wide")
+  names(w) <- sub(paste0("^", v, "\\."), "", names(w)); w <- w[order(w$Year), ]; w[w == 0] <- NA
+  w[, c(TRUE, colSums(!is.na(w[, -1])) >= 5)]
+}
+mixfit <- function(v, obsE = 0.05, ...) {
+  b <- build_jara(I = wide(v), model.type = "mixed.trends", assessment = "ices_ns", scenario = v,
+                  fixed.obsE = obsE, timeblock = 2015, backcast.na = 2000, ...)
+  fit_jara(b, ni = 5000, nb = 1000, nt = 4, nc = 2, threshold = c(0.8, 1))
+}
+ind <- list(`F/Fmsy` = mixfit("FFmsy"), `B/Bmsy` = mixfit("BBmsy"),
+            `B/Btrigger` = mixfit("BBtri"), ABImsy = mixfit("ABImsy", obsE = 0.2, proc.pen = 0.5))
+
+jagg_joint(ind)                                   # geometric mean ratios
+jagg_joint(ind, type = "pr", threshold.id = 2)    # proportion of stocks above 1 (F below 1)
+jagg_status_area(ind$`B/Bmsy`, ind$`F/Fmsy`, backcast.na = 2000)
+jagg_status_area(ind$`B/Bmsy`, scheme = "fao", backcast.na = 2000)
+jagg_kobe_trend(ind$`B/Bmsy`, ind$`F/Fmsy`)
+jagg_spaghetti(ind$`B/Bmsy`, ymax = 4)
+jagg_fits(ind$`B/Bmsy`, ncol = 6, refline = 1, ppd = FALSE)
+jagg_timeblock(ind$`B/Bmsy`)

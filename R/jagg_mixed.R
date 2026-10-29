@@ -1,5 +1,6 @@
 # Plots for JARA mixed-trend fits of many stocks (model.type = "mixed.trends"),
-# after Winker et al. (2026), Fish and Fisheries, and the code in
+# after Winker et al. (2026), Fish and Fisheries 27(3), doi:10.1111/faf.70066,
+# and the code in
 # github.com/Henning-Winker/ICES-Bmsy-FaF
 
 #' Indicator colours used in Winker et al. (2026)

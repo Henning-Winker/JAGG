@@ -141,22 +141,66 @@ On the demo fits:
 
 ## Gallery
 
-JABBA, South Atlantic swordfish (ICCAT example data, quick MCMC):
+Rendered with [`inst/examples/jagg_gallery.R`](inst/examples/jagg_gallery.R) (quick MCMC runs).
 
-![](man/figures/01_jabba_advice.png)
-![](man/figures/02_jabba_advice_rel.png)
-![](man/figures/14_jabba_advice_scenarios.png)
-![](man/figures/03_jabba_fits.png)
-![](man/figures/04_jabba_residuals.png)
-![](man/figures/05_jabba_runstest.png)
-![](man/figures/06_jabba_kobe.png)
-![](man/figures/07_jabba_retro.png)
-![](man/figures/08_jabba_hcxval.png)
+### JABBA: South Atlantic swordfish (ICCAT example data)
 
-JARA, smoothhound shark:
+![](man/figures/jabba_advice.png)
+![](man/figures/jabba_advice_rel.png)
+![](man/figures/jabba_advice_scenarios.png)
+![](man/figures/jabba_kobe.png)
+![](man/figures/jabba_biplot.png)
+![](man/figures/jabba_prj.png)
+![](man/figures/jabba_ensemble.png)
+![](man/figures/jabba_crisk.png)
+![](man/figures/jabba_catch.png)
+![](man/figures/jabba_procdev.png)
+![](man/figures/jabba_spdyn.png)
+![](man/figures/jabba_spphase.png)
+![](man/figures/jabba_indices.png)
+![](man/figures/jabba_fits.png)
+![](man/figures/jabba_residuals.png)
+![](man/figures/jabba_stdresiduals.png)
+![](man/figures/jabba_runstest.png)
+![](man/figures/jabba_qq.png)
+![](man/figures/jabba_ppc.png)
+![](man/figures/jabba_ppdist.png)
+![](man/figures/jabba_mcmc.png)
+![](man/figures/jabba_retro.png)
+![](man/figures/jabba_hcxval.png)
 
-![](man/figures/09_jara_advice.png)
-![](man/figures/10_jara_fits.png)
-![](man/figures/11_jara_runstest.png)
-![](man/figures/12_jara_retro.png)
-![](man/figures/13_jara_hcxval.png)
+### JARA: smoothhound shark
+
+![](man/figures/jara_advice.png)
+![](man/figures/jara_indices.png)
+![](man/figures/jara_fits.png)
+![](man/figures/jara_logfits.png)
+![](man/figures/jara_runstest.png)
+![](man/figures/jara_ppc.png)
+![](man/figures/jara_retro.png)
+![](man/figures/jara_retroiucn.png)
+![](man/figures/jara_hcxval.png)
+![](man/figures/jara_changes.png)
+![](man/figures/jara_iucn.png)
+![](man/figures/jara_jointindex.png)
+![](man/figures/jara_poptrj.png)
+![](man/figures/jara_state.png)
+![](man/figures/jara_timeblock.png)
+![](man/figures/jara_trjfit.png)
+
+### JARA mixed trends: ICES Greater North Sea stocks
+
+Data from Winker et al. (2026) ([ICES-Bmsy-FaF](https://github.com/Henning-Winker/ICES-Bmsy-FaF)); 17 stocks from 1980, by-order grid with Clupeiformes from all ecoregions.
+
+![](man/figures/mixed_fits.png)
+![](man/figures/mixed_grid.png)
+![](man/figures/mixed_joint.png)
+![](man/figures/mixed_joint_pr.png)
+![](man/figures/mixed_kobe_trend.png)
+![](man/figures/mixed_spaghetti.png)
+![](man/figures/mixed_status_fao.png)
+![](man/figures/mixed_status_kobe.png)
+
+## Reference
+
+Winker, H., Cardinale, M., Sharma, R., Kell, L. T., Mosqueira, I. and Griffiths, C. (2026). Assessing the progress of stock rebuilding in the Northeast Atlantic against levels that can produce maximum sustainable yield. *Fish and Fisheries* 27(3). https://doi.org/10.1111/faf.70066
