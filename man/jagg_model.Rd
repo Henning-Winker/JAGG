@@ -7,10 +7,12 @@
 jagg_model(x)
 }
 \arguments{
-\item{x}{a JABBA or JARA fit, hindcast, or list of fits}
+\item{x}{a JABBA or JARA fit, hindcast, list of fits, or a JABBA kobe
+posterior table (\code{fit$kbtrj}, or \code{fw_jabba()} projections)}
 }
 \value{
-one of "jabba", "jabba_hc", "jara", "jara_hc", "jabba_list", "jara_list"
+one of "jabba", "jabba_hc", "jara", "jara_hc", "jabba_list",
+"jara_list", "jabba_kb"
 }
 \description{
 Detect which model produced an object

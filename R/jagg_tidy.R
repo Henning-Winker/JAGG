@@ -1,14 +1,16 @@
-# JAGG: model detection and fit -> tidy converters
-# Draft, base R only (no data.table / dplyr needed).
-# Written against the current JABBA and JARA GitHub sources; untested.
+# JAGG: model detection and fit -> tidy converters (base R only)
 
 #' Detect which model produced an object
-#' @param x a JABBA or JARA fit, hindcast, or list of fits
-#' @return one of "jabba", "jabba_hc", "jara", "jara_hc", "jabba_list", "jara_list"
+#' @param x a JABBA or JARA fit, hindcast, list of fits, or a JABBA kobe
+#'   posterior table (`fit$kbtrj`, or `fw_jabba()` projections)
+#' @return one of "jabba", "jabba_hc", "jara", "jara_hc", "jabba_list",
+#'   "jara_list", "jabba_kb"
 #' @export
 jagg_model <- function(x) {
   cl <- intersect(class(x), c("jabba", "jabba_hc", "jara", "jara_hc"))
   if (length(cl)) return(cl[1])
+  if (is.data.frame(x) && all(c("year", "run", "type", "iter", "stock", "harvest") %in% names(x)))
+    return("jabba_kb")
 
   is_jabba <- function(o) is.list(o) && all(c("timeseries", "kobe", "refpts") %in% names(o))
   is_jara  <- function(o) is.list(o) && all(c("trj", "fits", "pop.posterior") %in% names(o))

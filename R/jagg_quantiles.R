@@ -9,12 +9,14 @@
 #' @keywords internal
 .iters <- function(f) {
   m <- jagg_model(f)
-  if (m == "jabba") {
-    kb <- f$kbtrj
+  if (m %in% c("jabba", "jabba_kb")) {
+    kb <- if (m == "jabba") f$kbtrj else f
     if (is.null(kb)) stop("No iteration-level output: refit with save.trj = TRUE.", call. = FALSE)
     q <- c(B = "B", H = "F", Catch = "Catch", stock = "B/Bmsy", harvest = "F/Fmsy", BB0 = "B/B0")
+    q <- q[names(q) %in% names(kb)]
+    run <- as.character(kb$run)
     out <- do.call(rbind, lapply(names(q), function(v) data.frame(
-      run = kb$run, year = kb$year, type = kb$type, iter = kb$iter,
+      run = run, year = kb$year, type = kb$type, iter = kb$iter,
       quantity = q[[v]], value = kb[[v]])))
     return(out)
   }
