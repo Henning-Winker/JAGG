@@ -44,21 +44,26 @@ scale_x_year <- function(n = 5, ...) {
 #' Reference-point lines with labels
 #'
 #' @param refs data frame with columns `quantity` (facet), `name`, `value`
+#'   and optionally `colour` (default from [.ref_colour()])
 #' @param years range of years, used to stagger the labels
 #' @param label.size label text size
+#' @param labels draw the labels (FALSE: lines only)
 #' @keywords internal
-geom_refpts <- function(refs, years, label.size = 2.5) {
+geom_refpts <- function(refs, years, label.size = 2.5, labels = TRUE) {
   if (is.null(refs) || !nrow(refs)) return(NULL)
-  refs$colour <- .ref_colour(refs$name)
+  if (is.null(refs$colour)) refs$colour <- NA
+  refs$colour[is.na(refs$colour)] <- .ref_colour(refs$name[is.na(refs$colour)])
+  ln <- ggplot2::geom_hline(data = refs, ggplot2::aes(yintercept = .data$value),
+                            colour = refs$colour, linetype = 2, linewidth = 0.5)
+  if (!labels) return(list(ln))
   xy <- stats::quantile(seq(min(years), max(years)),
                         c(0.2, 0.45, 0.75, 0.6, 0.3, 0.5, 0.1), names = FALSE)
   refs$x <- stats::ave(seq_len(nrow(refs)), refs$quantity,
                        FUN = function(i) xy[(seq_along(i) - 1) %% length(xy) + 1])
-  list(
-    ggplot2::geom_hline(data = refs, ggplot2::aes(yintercept = .data$value),
-                        colour = refs$colour, linetype = 2, linewidth = 0.5),
-    ggplot2::geom_label(data = refs, ggplot2::aes(x = .data$x, y = .data$value,
-                        label = .data$name), colour = refs$colour, size = label.size,
-                        fill = "white", label.size = 0, label.padding = ggplot2::unit(0.1, "lines"),
-                        inherit.aes = FALSE))
+  # label border: `linewidth` in ggplot2 >= 3.5.0, `label.size` before
+  noborder <- if (utils::packageVersion("ggplot2") >= "3.5.0") list(linewidth = 0) else list(label.size = 0)
+  lb <- do.call(ggplot2::geom_label, c(list(data = refs, mapping = ggplot2::aes(x = .data$x, y = .data$value,
+                label = .data$name), colour = refs$colour, size = label.size, fill = "white",
+                label.padding = ggplot2::unit(0.1, "lines"), inherit.aes = FALSE), noborder))
+  list(ln, lb)
 }

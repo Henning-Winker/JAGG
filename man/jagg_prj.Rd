@@ -7,8 +7,11 @@
 jagg_prj(
   x,
   type = c("B/Bmsy", "F/Fmsy", "Catch"),
-  level = 0.9,
-  bands = TRUE,
+  plotCIs = TRUE,
+  quantiles = c(0.05, 0.95),
+  cols = NULL,
+  alpha = 0.12,
+  fmax = 5,
   ncol = NULL,
   nyears = 20
 )
@@ -18,9 +21,16 @@ jagg_prj(
 
 \item{type}{quantities: any of "B/Bmsy", "F/Fmsy", "B/B0", "B", "F", "Catch"}
 
-\item{level}{credible interval level for the bands}
+\item{plotCIs}{draw bands for the projection scenarios (the fitted period
+always has its band)}
 
-\item{bands}{draw bands for the projection scenarios}
+\item{quantiles}{probabilities of the bands}
+
+\item{cols}{scenario colours (default \code{\link[=jagg_cols]{jagg_cols()}})}
+
+\item{alpha}{transparency of the scenario bands}
+
+\item{fmax}{cap for projected F/Fmsy, as in \code{jbplot_ensemble()}}
 
 \item{ncol}{number of facet columns}
 

@@ -6,42 +6,74 @@
 \usage{
 jagg_advice(
   x,
+  type = NULL,
   rel = FALSE,
-  panels = NULL,
-  probs = c(0.05, 0.2, 0.5, 0.8, 0.95),
+  plotCIs = TRUE,
+  quantiles = c(0.05, 0.95),
+  inner = c(0.2, 0.8),
+  joint = FALSE,
+  bfrac = 0.5,
+  bref = c("bmsy", "b0"),
+  reflines = TRUE,
+  reflabels = TRUE,
   refpts = NULL,
-  plotrefs = TRUE,
-  colour = "dodgerblue",
+  cols = NULL,
+  alpha = 0.2,
+  xlim = NULL,
   ncol = NULL,
-  osa = FALSE,
+  fmax = 5,
   prj = TRUE,
+  legend = TRUE,
+  osa = FALSE,
   label.size = 2.5
 )
 }
 \arguments{
-\item{x}{a JABBA or JARA fit, or a list of fits of the same model
-(scenarios), which are then coloured by run}
+\item{x}{a JABBA or JARA fit, a list of fits (coloured by run, named by
+the list names or the fits' scenarios), or \code{fw_jabba()} output}
 
-\item{rel}{JABBA: plot B/Bmsy, F/Fmsy and catch instead of B, F and catch}
+\item{type}{quantities to show, in order. JABBA: any of "B", "F",
+"Catch", "B/Bmsy", "F/Fmsy", "B/B0", "B/Bfrac", "Process deviation";
+JARA: "Abundance". Default: B, F, Catch (or B/Bmsy, F/Fmsy, Catch with
+\code{rel = TRUE})}
 
-\item{panels}{quantities to show, in order. JABBA: any of "B", "F",
-"Catch", "B/Bmsy", "F/Fmsy", "B/B0"; JARA: "Abundance"}
+\item{rel}{JABBA shortcut for \code{type = c("B/Bmsy", "F/Fmsy", "Catch")}}
 
-\item{probs}{five probabilities: outer and inner bands and the median}
+\item{plotCIs}{draw the credible bands}
+
+\item{quantiles}{probabilities of the outer band}
+
+\item{inner}{probabilities of the inner band (NULL for none)}
+
+\item{joint}{pool all runs into one ("Joint")}
+
+\item{bfrac, bref}{biomass fraction and reference ("bmsy" or "b0") for the
+"B/Bfrac" panel and the red \code{bfrac} line, as in \code{jbplot_ensemble()}}
+
+\item{reflines}{draw reference lines}
+
+\item{reflabels}{label the reference lines (estimated Bmsy, K, Fmsy, MSY)}
 
 \item{refpts}{optional named vector of extra reference points, e.g.
-\code{c(Blim = 0.5, Bpa = 0.8)}, in relative units when \code{rel = TRUE}. Names
-starting with "B" go to the biomass panel, "F" to the F panel.}
+\code{c(Blim = 0.4, Bpa = 0.6)}, in the units of the B/Bmsy and F/Fmsy panels
+when shown, else of B and F. Names starting with "F" go to the F panel.}
 
-\item{plotrefs}{draw reference points}
+\item{cols}{run colours (default: dodgerblue for one run, \code{\link[=jagg_cols]{jagg_cols()}}
+for several)}
 
-\item{colour}{band colour for a single run}
+\item{alpha}{transparency of the outer band (the inner band uses twice it)}
+
+\item{xlim}{range of years}
 
 \item{ncol}{number of facet columns}
 
-\item{osa}{drop the last year of F and catch (no catch yet in that year)}
+\item{fmax}{cap for projected F/Fmsy, as in \code{jbplot_ensemble()}}
 
 \item{prj}{include projection years (drawn dashed)}
+
+\item{legend}{show the run legend}
+
+\item{osa}{drop the last year of F and catch (no catch yet in that year)}
 
 \item{label.size}{size of the reference point labels}
 }
@@ -49,8 +81,10 @@ starting with "B" go to the biomass panel, "F" to the F panel.}
 a ggplot object
 }
 \description{
-After \code{FLRef::plotAdvice()}: one facet per quantity, a 90\% band (alpha
-0.2) and a 60\% band (alpha 0.4) around the median, y-axis from zero, and
-reference points drawn as labelled lines coloured by name (limits red,
-precautionary points orange, B0/K and triggers blue, MSY targets green).
+After \code{FLRef::plotAdvice()}: one facet per quantity, a 90\% band and a 60\%
+band around the median, y-axis from zero, and reference points drawn as
+labelled lines coloured by name (limits red, precautionary points orange,
+B0/K and triggers blue, MSY targets green). Replaces \code{jbplot_trj()} and,
+with a list of fits, \code{jbplot_summary()}. Takes the same arguments as
+\code{\link[=jagg_ensemble]{jagg_ensemble()}}; only the defaults differ.
 }

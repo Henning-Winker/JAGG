@@ -328,53 +328,6 @@ jagg_bprior <- function(x) {
     ggplot2::labs(x = paste(ml, "in", bp[3]), y = "Density") + theme_jagg()
 }
 
-#' Ensemble or multi-run trajectories
-#'
-#' As `jbplot_ensemble()`: medians and credible bands of several runs,
-#' scenarios or forecasts, coloured with [jagg_cols()].
-#' @param x a JABBA fit, a list of fits, or `fw_jabba()` output
-#' @param type quantities: "B/Bmsy", "F/Fmsy", "B", "F", "Process deviation",
-#'   "Catch", "B/B0"
-#' @param joint pool all runs into one ("Joint")
-#' @param level credible interval level
-#' @param fmax cap for F/Fmsy in projections (as `jbplot_ensemble()`)
-#' @param ncol number of facet columns
-#' @export
-jagg_ensemble <- function(x, type = c("B/Bmsy", "F/Fmsy", "B", "F", "Process deviation", "Catch"),
-                          joint = FALSE, level = 0.95, fmax = 5, ncol = 3) {
-  m <- jagg_model(x)
-  kb <- switch(m, jabba = x$kbtrj, jabba_kb = x,
-               jabba_list = do.call(rbind, lapply(seq_along(x), function(i) {
-                 k <- x[[i]]$kbtrj
-                 k$run <- if (!is.null(names(x)) && nzchar(names(x)[i])) names(x)[i] else x[[i]]$scenario
-                 k })),
-               stop("x must be a JABBA fit, a list of fits or fw_jabba() output.", call. = FALSE))
-  kb$run <- as.character(kb$run)
-  if (joint) kb$run <- "Joint"
-  if ("harvest" %in% names(kb)) kb$harvest[kb$type == "prj"] <- pmin(kb$harvest[kb$type == "prj"], fmax)
-  it <- .iters(kb)
-  if ("Bdev" %in% names(kb))
-    it <- rbind(it, data.frame(run = kb$run, year = kb$year, type = kb$type, iter = kb$iter,
-                               quantity = "Process deviation", value = kb$Bdev))
-  it <- it[it$quantity %in% type, ]
-  a <- (1 - level) / 2
-  q <- .qbands(it, c(a, 0.5, 0.5, 0.5, 1 - a))
-  runs <- unique(kb$run)
-  q$run <- factor(q$run, runs); q$quantity <- factor(q$quantity, type)
-  cols <- stats::setNames(jagg_cols(length(runs)), runs)
-  p <- ggplot2::ggplot(q, ggplot2::aes(x = .data$year, y = .data$med, colour = .data$run, fill = .data$run)) +
-    ggplot2::geom_ribbon(ggplot2::aes(ymin = .data$lo2, ymax = .data$hi2), colour = NA, alpha = 0.25) +
-    ggplot2::geom_line(linewidth = 0.7) +
-    ggplot2::scale_colour_manual(values = cols) + ggplot2::scale_fill_manual(values = cols) +
-    ggplot2::facet_wrap(~quantity, scales = "free_y", ncol = ncol) +
-    scale_x_year() + ggplot2::labs(x = "Year", y = NULL) + theme_jagg()
-  ref <- data.frame(quantity = factor(intersect(type, c("B/Bmsy", "F/Fmsy", "Process deviation")), type))
-  ref$y <- ifelse(ref$quantity == "Process deviation", 0, 1)
-  if (nrow(ref)) p <- p + ggplot2::geom_hline(data = ref, ggplot2::aes(yintercept = .data$y), linetype = 2)
-  if (any(type != "Process deviation")) p <- p + ggplot2::expand_limits(y = 0)
-  p
-}
-
 #' Risk of projected catches
 #'
 #' For `fw_jabba(quant = "Catch")` projections: the probability that B is

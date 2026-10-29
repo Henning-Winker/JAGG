@@ -4,14 +4,17 @@
 \alias{geom_refpts}
 \title{Reference-point lines with labels}
 \usage{
-geom_refpts(refs, years, label.size = 2.5)
+geom_refpts(refs, years, label.size = 2.5, labels = TRUE)
 }
 \arguments{
-\item{refs}{data frame with columns \code{quantity} (facet), \code{name}, \code{value}}
+\item{refs}{data frame with columns \code{quantity} (facet), \code{name}, \code{value}
+and optionally \code{colour} (default from \code{\link[=.ref_colour]{.ref_colour()}})}
 
 \item{years}{range of years, used to stagger the labels}
 
 \item{label.size}{label text size}
+
+\item{labels}{draw the labels (FALSE: lines only)}
 }
 \description{
 Reference-point lines with labels

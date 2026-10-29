@@ -62,6 +62,8 @@ The full demo for both models is in
 | `jagg_timeblock()` | Time-block effect | `jrplot_timeblock` | | ✓ |
 | `jagg_jointindex()` | Joint index | `jrplot_jointindex` | | ✓ |
 
+`jagg_advice()` and `jagg_ensemble()` take the same arguments (`type`, `plotCIs`, `quantiles`, `inner`, `joint`, `bfrac`, `bref`, `reflines`, `reflabels`, `refpts`, `cols`, `alpha`, `xlim`, `ncol`, `fmax`, `prj`, `legend`), named after `jbplot_ensemble()` and `jbplot_summary()`. They differ only in defaults: nested 90%/60% bands with labelled reference points for the advice plot, and 95% bands over six panels for the ensemble. `plotCIs = FALSE` draws medians only.
+
 #### Model diagnostics
 
 | Function | Plot | Replaces | JABBA | JARA |
@@ -152,6 +154,7 @@ Rendered with [`inst/examples/jagg_gallery.R`](inst/examples/jagg_gallery.R) (qu
 ![](man/figures/jabba_biplot.png)
 ![](man/figures/jabba_prj.png)
 ![](man/figures/jabba_ensemble.png)
+![](man/figures/jabba_ensemble_noci.png)
 ![](man/figures/jabba_crisk.png)
 ![](man/figures/jabba_catch.png)
 ![](man/figures/jabba_procdev.png)
