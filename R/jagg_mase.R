@@ -20,10 +20,12 @@
 #' @param MAE.base.adj minimum denominator for MASE.adj (default 0.1), as
 #'   `MAE.base.adj` in ss3diags and `naive.min` in JABBA
 #' @param residuals return the prediction and naive residuals by year as well
+#' @param joint add a "joint" row: MASE over the pooled residuals of all
+#'   indices, as in JABBA `jbmase()` and ss3diags `SSmase()`
 #' @return data frame with Index, MASE, MASE.adj, MAE.PR, MAE.base, n.eval;
 #'   with `residuals = TRUE` a list of `mase` and `residuals`
 #' @export
-jagg_mase <- function(x, ref = NULL, MAE.base.adj = 0.1, residuals = FALSE) {
+jagg_mase <- function(x, ref = NULL, MAE.base.adj = 0.1, residuals = FALSE, joint = TRUE) {
   d <- if (is.data.frame(x)) x else .hc_fits(x, ref)
   d <- d[is.finite(d$hat), c("index", "year", "obs", "hat", "peel")]
   peels <- sort(unique(d$peel[d$peel > 0]))
@@ -69,8 +71,17 @@ jagg_mase <- function(x, ref = NULL, MAE.base.adj = 0.1, residuals = FALSE) {
     list(mase = out, res = data.frame(Index = di$index[1], r))
   })
 
-  mase <- do.call(rbind, lapply(res, `[[`, "mase")); rownames(mase) <- NULL
+  mase <- do.call(rbind, lapply(res, `[[`, "mase"))
+  rr <- do.call(rbind, lapply(res, `[[`, "res"))
+  # joint MASE over the pooled residuals of all indices (as JABBA and ss3diags)
+  if (joint && !is.null(rr) && nrow(rr)) {
+    pr <- mean(abs(rr$pred.res)); nb <- mean(abs(rr$naive.res))
+    mase <- rbind(mase, data.frame(Index = "joint", MASE = pr / nb,
+                                   MASE.adj = pr / max(nb, MAE.base.adj),
+                                   MAE.PR = pr, MAE.base = nb, n.eval = nrow(rr)))
+  }
+  rownames(mase) <- NULL
   if (!residuals) return(mase)
-  rr <- do.call(rbind, lapply(res, `[[`, "res")); rownames(rr) <- NULL
+  if (!is.null(rr)) rownames(rr) <- NULL
   list(mase = mase, residuals = rr)
 }

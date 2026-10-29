@@ -64,17 +64,18 @@ jagg_runstest <- function(x, mixing = "less") {
   rt <- do.call(rbind, lapply(split(d, d$index), function(di) {
     r <- jagg_runs(di$residual[order(di$year)], mixing)
     data.frame(index = di$index[1], p.runs = r$p.runs, lcl = r$sig3lim[1], ucl = r$sig3lim[2],
-               test = ifelse(r$p.runs < 0.05, "Failed", "Passed"),
+               test = if (is.na(r$p.runs)) "Too few residuals" else if (r$p.runs < 0.05) "Failed" else "Passed",
                xmin = min(di$year) - 0.5, xmax = max(di$year) + 0.5)
   }))
   d <- merge(d, rt[, c("index", "lcl", "ucl")], by = "index")
   d$outlier <- d$residual < d$lcl | d$residual > d$ucl
-  lab <- stats::setNames(sprintf("%s\np = %.3f", rt$index, rt$p.runs), rt$index)
+  lab <- stats::setNames(ifelse(is.na(rt$p.runs), paste0(rt$index, "\np = NA"), sprintf("%s\np = %.3f", rt$index, rt$p.runs)), rt$index)
   p <- ggplot2::ggplot(d, ggplot2::aes(x = .data$year, y = .data$residual)) +
     ggplot2::geom_rect(data = rt, ggplot2::aes(xmin = .data$xmin, xmax = .data$xmax,
                        ymin = .data$lcl, ymax = .data$ucl, fill = .data$test),
                        inherit.aes = FALSE, alpha = 0.8) +
-    ggplot2::scale_fill_manual(values = c(Passed = "#cbe368", Failed = "#ef8575"), drop = FALSE) +
+    ggplot2::scale_fill_manual(values = c(Passed = "#cbe368", Failed = "#ef8575",
+                                          `Too few residuals` = "grey85")) +
     ggplot2::geom_hline(yintercept = 0, linetype = 2) +
     ggplot2::geom_segment(ggplot2::aes(xend = .data$year, yend = 0)) +
     ggplot2::geom_point(size = 1.8) +

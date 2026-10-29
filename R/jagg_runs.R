@@ -29,6 +29,8 @@ jagg_runs <- function(x, mixing = c("less", "two.sided", "greater")) {
   runs <- 1 + sum(diff(s) != 0)
   mu <- 2 * n1 * n2 / n + 1
   v  <- 2 * n1 * n2 * (2 * n1 * n2 - n) / (n^2 * (n - 1))
+  # too few residuals for the test (e.g. one positive and one negative)
+  if (!is.finite(v) || v <= 0) return(list(sig3lim = lim, p.runs = NA_real_))
   z  <- (runs - mu) / sqrt(v)
   p  <- switch(mixing, less = stats::pnorm(z), greater = 1 - stats::pnorm(z),
                two.sided = 2 * min(stats::pnorm(z), 1 - stats::pnorm(z)))

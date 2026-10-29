@@ -4,7 +4,7 @@
 \alias{jagg_mase}
 \title{Hindcast cross-validation statistics}
 \usage{
-jagg_mase(x, ref = NULL, MAE.base.adj = 0.1, residuals = FALSE)
+jagg_mase(x, ref = NULL, MAE.base.adj = 0.1, residuals = FALSE, joint = TRUE)
 }
 \arguments{
 \item{x}{a JABBA hindcast (\code{hindcast_jabba()}), JARA hindcast
@@ -17,6 +17,9 @@ the peeled runs)}
 \code{MAE.base.adj} in ss3diags and \code{naive.min} in JABBA}
 
 \item{residuals}{return the prediction and naive residuals by year as well}
+
+\item{joint}{add a "joint" row: MASE over the pooled residuals of all
+indices, as in JABBA \code{jbmase()} and ss3diags \code{SSmase()}}
 }
 \value{
 data frame with Index, MASE, MASE.adj, MAE.PR, MAE.base, n.eval;

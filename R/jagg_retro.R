@@ -152,6 +152,10 @@ jagg_hcxval <- function(hc, ref = NULL, MAE.base.adj = 0.1, adj = FALSE, ncol = 
     ggplot2::facet_wrap(~index, scales = "free_y", ncol = ncol, labeller = ggplot2::as_labeller(lab)) +
     scale_x_year() + ggplot2::labs(x = "Year", y = "Index") + theme_jagg() +
     ggplot2::theme(legend.position = "bottom")
+  jt <- ms[ms$Index == "joint", ]
+  if (nrow(jt)) p <- p + ggplot2::labs(subtitle = if (adj)
+    sprintf("Joint MASE = %.2f (adj = %.2f), n = %d", jt$MASE, jt$MASE.adj, jt$n.eval) else
+    sprintf("Joint MASE = %.2f, n = %d", jt$MASE, jt$n.eval))
   attr(p, "mase") <- ms
   p
 }
