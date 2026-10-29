@@ -4,7 +4,14 @@
 \alias{jagg_fits}
 \title{Fits to abundance indices}
 \usage{
-jagg_fits(x, ppd = TRUE, log = FALSE, colour = "dodgerblue")
+jagg_fits(
+  x,
+  ppd = TRUE,
+  log = FALSE,
+  colour = "dodgerblue",
+  ncol = NULL,
+  refline = NULL
+)
 }
 \arguments{
 \item{x}{a JABBA or JARA fit}
@@ -14,6 +21,10 @@ jagg_fits(x, ppd = TRUE, log = FALSE, colour = "dodgerblue")
 \item{log}{plot on log scale (as \code{jbplot_logfits()})}
 
 \item{colour}{colour of the fit}
+
+\item{ncol}{number of facet columns (e.g. 6 for many stocks)}
+
+\item{refline}{optional reference line (e.g. 1 for B/Bmsy indices)}
 }
 \description{
 Observations (points), fitted median with 95\% credible interval and,

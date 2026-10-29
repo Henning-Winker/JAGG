@@ -88,8 +88,8 @@ jagg_stdresiduals <- function(x) {
 #' Surplus production dynamics
 #'
 #' The expected production curve with the realised surplus production of each
-#' year. Realised production in year t is B[t+1] - B[t] + C[t] and is plotted
-#' against B[t]. (`jbplot_spdyn()` plots it against B[t+1].)
+#' year. Realised production in year t is `B[t+1] - B[t] + C[t]` and is plotted
+#' against `B[t]` (`jbplot_spdyn()` plots it against `B[t+1]`).
 #' @param x a JABBA fit
 #' @param rel plot B/K and SP/MSY
 #' @export

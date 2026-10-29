@@ -327,7 +327,7 @@ jagg_timeblock <- function(x, type = c("change", "r"), level = 0.95) {
     ggplot2::geom_area(fill = "grey70") +
     ggplot2::geom_area(data = d[d$inner, ], fill = "grey50") +
     ggplot2::geom_vline(xintercept = md) + ggplot2::geom_vline(xintercept = 0, colour = "blue") +
-    ggplot2::annotate("text", x = md, y = Inf, vjust = 1.5, size = 3.4, fontface = "bold",
+    ggplot2::annotate("text", x = md, y = Inf, vjust = 1.5, hjust = -0.15, size = 3.4, fontface = "bold",
                       label = if (type == "change") sprintf("%s%.1f%%", ifelse(md > 0, "+", ""), md) else
                         sprintf("%s%.3f", ifelse(md > 0, "+", ""), md)) +
     ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(0, 0.12))) +

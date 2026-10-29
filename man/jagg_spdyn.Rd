@@ -13,6 +13,6 @@ jagg_spdyn(x, rel = FALSE)
 }
 \description{
 The expected production curve with the realised surplus production of each
-year. Realised production in year t is B\link{t+1} - B\link{t} + C\link{t} and is plotted
-against B\link{t}. (\code{jbplot_spdyn()} plots it against B\link{t+1}.)
+year. Realised production in year t is \code{B[t+1] - B[t] + C[t]} and is plotted
+against \code{B[t]} (\code{jbplot_spdyn()} plots it against \code{B[t+1]}).
 }

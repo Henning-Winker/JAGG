@@ -6,10 +6,14 @@
 #' @param ppd draw the posterior predictive interval
 #' @param log plot on log scale (as `jbplot_logfits()`)
 #' @param colour colour of the fit
+#' @param ncol number of facet columns (e.g. 6 for many stocks)
+#' @param refline optional reference line (e.g. 1 for B/Bmsy indices)
 #' @export
-jagg_fits <- function(x, ppd = TRUE, log = FALSE, colour = "dodgerblue") {
+jagg_fits <- function(x, ppd = TRUE, log = FALSE, colour = "dodgerblue", ncol = NULL, refline = NULL) {
   d <- jagg_tidy(x, "fits")
   d <- d[d$peel == 0 | is.na(d$peel), ]
+  # mixed-trend fits store every year for each stock: keep observed years
+  if (jagg_model(x) == "jara" && isTRUE(x$settings$mixed.trends)) d <- d[is.finite(d$obs), ]
   p <- ggplot2::ggplot(d, ggplot2::aes(x = .data$year))
   if (ppd && any(is.finite(d$ppd_lci)))
     p <- p + ggplot2::geom_ribbon(ggplot2::aes(ymin = .data$ppd_lci, ymax = .data$ppd_uci),
@@ -19,8 +23,9 @@ jagg_fits <- function(x, ppd = TRUE, log = FALSE, colour = "dodgerblue") {
     ggplot2::geom_line(ggplot2::aes(y = .data$hat), colour = colour, linewidth = 0.7) +
     ggplot2::geom_point(ggplot2::aes(y = .data$obs), shape = 21, fill = "white", size = 1.8,
                         na.rm = TRUE) +
-    ggplot2::facet_wrap(~index, scales = "free_y") + scale_x_year() +
+    ggplot2::facet_wrap(~index, scales = "free_y", ncol = ncol) + scale_x_year() +
     ggplot2::labs(x = "Year", y = "Index") + theme_jagg()
+  if (!is.null(refline)) p <- p + ggplot2::geom_hline(yintercept = refline, linetype = 3)
   if (log) p <- p + ggplot2::scale_y_log10() else p <- p + ggplot2::expand_limits(y = 0)
   p
 }
